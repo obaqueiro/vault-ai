@@ -11,6 +11,7 @@ import (
 	"math"
 	"net/http"
 	"strconv"
+	googleid "github.com/google/uuid"
 )
 
 type PineconeVector struct {
@@ -27,8 +28,9 @@ func upsertEmbeddingsToPinecone(embeddings [][]float32, chunks []Chunk, uuid str
 	vectors := make([]PineconeVector, len(embeddings))
 	for i, embedding := range embeddings {
 		chunk := chunks[i]
+		myuuid := googleid.NewString()
 		vectors[i] = PineconeVector{
-			ID:     fmt.Sprintf("id-%d", i),
+			ID:     fmt.Sprintf("id-%s", myuuid),
 			Values: embedding,
 			Metadata: map[string]string{
 				"file_name": chunk.Title,
